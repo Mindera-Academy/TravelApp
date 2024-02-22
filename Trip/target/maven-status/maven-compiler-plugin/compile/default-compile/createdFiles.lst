@@ -1,0 +1,6 @@
+com\Trip\repository\TripRepository.class
+com\Trip\model\Trip.class
+com\Trip\exceptions\TripNotFoundException.class
+com\Trip\service\TripService.class
+com\Trip\TripApplication.class
+com\Trip\controller\TripController.class
