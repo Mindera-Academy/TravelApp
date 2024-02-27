@@ -1,10 +1,11 @@
-package com.cart.Cart.controller;
+package com.cart.cart.controller;
 
-import com.cart.Cart.execption.CartNotFoundException;
-import com.cart.Cart.execption.TripNotFoundException;
-import com.cart.Cart.execption.UserNotFoundException;
-import com.cart.Cart.model.Cart;
-import com.cart.Cart.service.CartService;
+import com.cart.cart.execption.CartNotFoundException;
+import com.cart.cart.execption.TripNotFoundException;
+import com.cart.cart.execption.UserNotFoundException;
+import com.cart.cart.domain.Cart;
+import com.cart.cart.model.CartResponse;
+import com.cart.cart.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,8 @@ public class CartController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cart> getCart(@PathVariable Integer id) {
-        Cart cart = cartService.getOne(id);
+    public ResponseEntity<CartResponse> getCart(@PathVariable Integer id) {
+        CartResponse cart = cartService.getOne(id);
         return ResponseEntity.ok(cart);
     }
 

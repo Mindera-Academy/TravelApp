@@ -1,10 +1,13 @@
-package com.cart.Cart.service;
-import com.cart.Cart.execption.CartNotFoundException;
-import com.cart.Cart.execption.TripNotFoundException;
-import com.cart.Cart.execption.UserNotFoundException;
-import com.cart.Cart.model.Cart;
-import com.cart.Cart.model.Status;
-import com.cart.Cart.repository.CartRepository;
+package com.cart.cart.service;
+import com.cart.cart.execption.CartNotFoundException;
+import com.cart.cart.execption.TripNotFoundException;
+import com.cart.cart.execption.UserNotFoundException;
+import com.cart.cart.domain.Cart;
+import com.cart.cart.domain.Status;
+import com.cart.cart.model.CartResponse;
+import com.cart.cart.model.TripResponse;
+import com.cart.cart.repository.CartRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,18 +15,22 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CartService {
 
     private final CartRepository cartRepository;
+    private final TripService tripService;
 
-    @Autowired
-    public CartService(CartRepository cartRepository) {
-        this.cartRepository = cartRepository;
-    }
-
-    public Cart getOne(Integer id) {
-        Optional<Cart> cart = cartRepository.findById(id);
-        return cart.orElseThrow(() -> new CartNotFoundException("Cart " + id + " not found"));
+    public CartResponse getOne(Integer id) {
+        Optional<Cart> optCart = cartRepository.findById(id);
+        Cart cart = optCart.orElseThrow(() -> new CartNotFoundException("Cart " + id + " not found"));
+        return CartResponse.builder()
+                .id(cart.getId())
+                .status(cart.getStatus())
+                .price(cart.getPrice())
+                .trip(tripService.getTripById(cart.getTripId()))
+                .user(null)
+                .build();
     }
 
     public List<Cart> getAll() {
@@ -31,7 +38,7 @@ public class CartService {
     }
 
     public Cart addOne(Cart cart) {
-        cart.setStatus(Status.Created);
+        cart.setStatus(Status.CREATED);
         return cartRepository.save(cart);
     }
 
@@ -48,7 +55,7 @@ public class CartService {
     }
 
     public List<Cart> getPaidOrders() {
-        return cartRepository.findByStatus(Status.Paid);
+        return cartRepository.findByStatus(Status.PAID);
     }
 
     public List<Cart> getOrdersByUserId(Integer userId) {

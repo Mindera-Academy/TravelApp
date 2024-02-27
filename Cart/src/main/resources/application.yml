@@ -29,10 +29,7 @@ springdoc:
     path: /swagger-ui.html
 
 app:
-  school:
-    redis:
-      ttl-in-millis: 25000
-    
-    queue:
-      seller: SELLER
-      ordering: ORDERING 
+  trip:
+    host: localhost
+    port: 8081
+    baseUrl: /trip

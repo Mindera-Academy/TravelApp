@@ -1,7 +1,7 @@
-package com.cart.Cart.repository;
+package com.cart.cart.repository;
 
-import com.cart.Cart.model.Cart;
-import com.cart.Cart.model.Status;
+import com.cart.cart.domain.Cart;
+import com.cart.cart.domain.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

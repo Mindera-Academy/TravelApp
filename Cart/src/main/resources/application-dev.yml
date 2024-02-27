@@ -17,3 +17,8 @@ spring:
     port: ${RABBIT_PORT}
     username: ${RABBIT_USER}
     password: ${RABBIT_PASS}
+
+app:
+  trip:
+    host: ${TRIP_HOST}
+    port: ${TRIP_PORT}

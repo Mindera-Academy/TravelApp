@@ -1,4 +1,4 @@
-package com.cart.Cart.execption;
+package com.cart.cart.execption;
 
 
 public class UserNotFoundException extends RuntimeException {
