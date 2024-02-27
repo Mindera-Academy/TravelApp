@@ -1,0 +1,137 @@
+version: "3.9"
+
+networks:
+  default_net:
+    name: default_net
+    driver: bridge
+
+volumes:
+  database-store:
+    driver: local
+
+services:
+  app-user:
+    container_name: app-users
+    build:
+      context: "./User" 
+    ports:
+      - 8090:8080 
+    depends_on:
+      - database
+      - rabbitmq
+      - redis
+    environment:
+      TZ: Europe/Lisbon
+      DB_HOST: database-travelapp
+      DB_PORT: 5432
+      DB_NAME: travelapp
+      DB_USER: ines
+      DB_PASS: 12345
+      SQL_SHOW: true
+      DLL_AUTO: update
+      REDIS_HOST: redis-travelapp
+      REDIS_PORT: 6379
+      REDIS_PASS: 12345
+      RABBIT_HOST: rabbitmq-travelapp
+      RABBIT_PORT: 5672
+      RABBIT_USER: ines
+      RABBIT_PASS: 12345
+    networks:
+      - default_net
+
+  app-trip:
+    container_name: app-trip
+    build:
+      context: "./Trip" 
+    ports:
+      - 8091:8080 
+    depends_on:
+      - database
+      - rabbitmq
+      - redis
+    environment:
+      TZ: Europe/Lisbon
+      DB_HOST: database-travelapp
+      DB_PORT: 5432
+      DB_NAME: travelapp
+      DB_USER: ines
+      DB_PASS: 12345
+      SQL_SHOW: true
+      DLL_AUTO: update
+      REDIS_HOST: redis-travelapp
+      REDIS_PORT: 6379
+      REDIS_PASS: 12345
+      RABBIT_HOST: rabbitmq-travelapp
+      RABBIT_PORT: 5672
+      RABBIT_USER: ines
+      RABBIT_PASS: 12345
+    networks:
+      - default_net
+
+  app-product:
+    container_name: app-cart
+    build:
+      context: "./Cart" 
+    ports:
+      - 8092:8080 
+    depends_on:
+      - database
+      - rabbitmq
+      - redis
+    environment:
+      TZ: Europe/Lisbon
+      DB_HOST: database-travelapp
+      DB_PORT: 5432
+      DB_NAME: travel app
+      DB_USER: ines
+      DB_PASS: 12345
+      SQL_SHOW: true
+      DLL_AUTO: update
+      REDIS_HOST: redis-travelapp
+      REDIS_PORT: 6379
+      REDIS_PASS: 12345
+      RABBIT_HOST: rabbitmq-travelapp
+      RABBIT_PORT: 5672
+      RABBIT_USER: ines
+      RABBIT_PASS: 12345
+    networks:
+      - default_net
+
+  database:
+    image: postgres:13
+    container_name: database-travelapp
+    volumes:
+      - database-store:/var/lib/postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ines
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: travelapp
+    networks:
+      - default_net
+
+  rabbitmq:
+    image: rabbitmq:3.12.12-management
+    container_name: rabbitmq-travelapp
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: ines
+      RABBITMQ_DEFAULT_PASS: 12345
+    volumes:
+      - database-store:/rabbitmq
+    networks:
+      - default_net
+
+  redis:
+    image: redis:6.2.6
+    container_name: redis-travelapp
+    ports:
+      - 6379:6379
+    command: redis-server --save 20 1 --loglevel warning --requirepass 12345 # eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      - database-store:/redis
+    networks:
+      - default_net
